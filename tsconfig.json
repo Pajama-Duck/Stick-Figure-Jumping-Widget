@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "lib":["ES2017", "DOM"],
-    "downlevelIteration": true,
-    "target": "ES6"
+    "target": "ES6",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist"
   }
 }

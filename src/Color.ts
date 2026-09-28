@@ -1,3 +1,5 @@
+
+
 export default class Color {
   private _r: number;
   private _g: number;
@@ -11,7 +13,10 @@ export default class Color {
     this._b = b;
     this._a = a;
 
+    //set something to css string just in case
+    this.cssString = "(0,0,0,0)";
     this.makeCssString();
+    
   }
 
   get r() { return this._r; }
@@ -36,4 +41,3 @@ export default class Color {
     return new Color(this._r, this._g, this._b, this._a);
   }
 };
-
