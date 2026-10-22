@@ -5,6 +5,7 @@ import Tile from "./Tile";
 import Vector from "./Vector";
 import Platform from "./Game-Components/Platform";
 import TextBox from "./Game-Components/TextBox";
+import Button from "./Game-Components/Button";
 
 const WIDTH = 40;
 const HEIGHT = 30;
@@ -38,7 +39,9 @@ const blankScreen = Array.from({ length: WIDTH*HEIGHT }, (_, i) => {
 
 const title = new TextBox("This is a game", new Vector(WIDTH/2 - 7, HEIGHT/2));
 
-const startButton = new TextBox("Start", new Vector(WIDTH/2 - 3, HEIGHT/2 + 4));
+const startButton = new Button(11, 3, new Vector(WIDTH/2 - 6, HEIGHT/2 + 2), "Start");
+
+//put something below
 
 
 //game layer elements
@@ -135,22 +138,20 @@ renderer.addLayer('title', layers.titleScreen);
 }) */
 
 
-const draw = () => {
+var draw = () => {
   backgroundTiles.forEach(tile => layers.background.draw(tile));
   layers.actor.draw(player);
   playerBodyStanding.forEach(tile => layers.actor.draw(tile));
   platform.forEach(Platform => Platform.tiles.forEach(tile => layers.platforms.draw(tile)));
-  //blankScreen.forEach(tile => layers.titleScreen.draw(tile));
-  //title.tiles.forEach(tile => layers.titleScreen.draw(tile));
-  //startButton.tiles.forEach(tile => layers.titleScreen.draw(tile));
-    
+  blankScreen.forEach(tile => layers.titleScreen.draw(tile));
+  title.tiles.forEach(tile => layers.titleScreen.draw(tile));
+  startButton.tiles.forEach(tile => layers.titleScreen.draw(tile));
   renderer.commit();
 
   requestAnimationFrame(draw);
 }
 
 draw();
-
 //controls for character
 /*normal character movement, such as in an rpg
 document.addEventListener('keydown', e => {
@@ -223,7 +224,11 @@ document.addEventListener('keydown', e => {
 
 
 //gravity ( character falls if not on ground or platform)
-document.addEventListener('DOMContentLoaded', e=>{gameRunning= true});
+/* document.addEventListener('DOMContentLoaded', e=>{});
+const btnClick = new CustomEvent("click");
+startButton.addEventListener("click", startGame);
+startButton.dispatchEvent(btnClick); */
+startGame();
 setInterval(characterFalls, 300);
 setInterval(platformsFall, 1500);
 function characterFalls(){
@@ -307,10 +312,16 @@ function wait(ms: any) {
 }
 
 
+//event functions
+function startGame(){
+  gameRunning = true;
+  renderer.removeLayer("title", layers.titleScreen);
+}
+
 
 /* Character Assets
 
-   O        O         O        O        O
+  O        O         O        O        O
  /|\      /|\       /|\      /|\      /|\
 _/\_      L_L       7 7      / \      | |
 

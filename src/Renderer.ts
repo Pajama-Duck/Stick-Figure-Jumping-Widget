@@ -25,6 +25,19 @@ export default class Renderer {
     return this;
   }
 
+  removeLayer(name: string, layer: Layer){
+    if(name in this.namedLayers){
+      this.layerElements[name]?.remove();
+      delete this.layerElements[name];
+      delete this.namedLayers[name];
+      const layerIndex = this.layers.indexOf(layer);
+      if(layerIndex !== -1){
+        this.layers.splice(layerIndex, 1);
+      }
+    }
+    this.orderLayers();
+  }
+
   onBeforeDraw(cb: () => void) {
     this.beforeDraw = cb;
   }
@@ -37,7 +50,8 @@ export default class Renderer {
 
       if (!layerEl) {
         layerEl = document.createElement('div');
-        layerEl.classList.add('asc-engine-layer');
+        layerEl.classList.add('asc-engine-layer-');
+        layerEl.id = ('asc-engine-layer-' + name);
         layerEl.style.fontSize = `${this.size}px`;
         layerEl.style.top = `${layer.pos.y * this.size}px`;
         layerEl.style.left = `${layer.pos.x * this.size / 2}px`;
@@ -45,7 +59,7 @@ export default class Renderer {
         layerEl.style.width = `${layer.size.x * this.size / 2}px`;
         layerEl.style.zIndex = layer.z.toString();
 
-        document.getElementById('asc-engine-layer-container').appendChild(layerEl);
+        document.getElementById('asc-engine-layer-container')?.appendChild(layerEl);
         this.layerElements[name] = layerEl;
       }
 
